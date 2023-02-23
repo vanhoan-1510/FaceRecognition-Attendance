@@ -16,7 +16,6 @@ for cl in myList:
     classNames.append(os.path.splitext(cl)[0])
     print(classNames)
 
-
 def findEncodings(images):
     encodeList = []
 
@@ -27,7 +26,6 @@ def findEncodings(images):
             encode = face_recognition.face_encodings(img, faces)[0]
             encodeList.append(encode)
     return encodeList
-
 
 def markAttendance(name):
     with open('Attendance.csv', 'r+') as f:
@@ -49,6 +47,7 @@ cap = cv2.VideoCapture(0)
 
 while True:
     success, img = cap.read()
+    img = cv2.flip(img, 1)
     imgS = cv2.resize(img, (0, 0), None, 0.25, 0.25)
     imgS = cv2.cvtColor(imgS, cv2.COLOR_BGR2RGB)
 
@@ -66,9 +65,10 @@ while True:
             y1, x2, y2, x1 = y1 * 4, x2 * 4, y2 * 4, x1 * 4
             cv2.rectangle(img, (x1, y1), (x2, y2), (0, 255, 0), 2)
             cv2.rectangle(img, (x1, y2 - 35), (x2, y2), (0, 255, 0), cv2.FILLED)
-            cv2.putText(img, name, (x1 + 6, y2 - 6), cv2.FONT_HERSHEY_COMPLEX, 1, (255, 255, 255), 2)
+            cv2.putText(img, name, (x1 + 6, y2 - 6), cv2.FONT_HERSHEY_COMPLEX, 0.6, (255, 255, 255), 2)
             markAttendance(name)
 
     cv2.imshow('Webcam', img)
+
     if cv2.waitKey(50) & 0xFF == ord('q'):
         break
